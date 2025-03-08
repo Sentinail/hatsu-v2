@@ -16,14 +16,21 @@ if (typeof window !== "undefined") {
   });
 }
 
-export async function getNormalizedQueryKey(query: string, variables: object) {
-  const minifiedQuery = compress(query);
+export async function hash(string: string) {
   const encoder = new TextEncoder();
-  const data = encoder.encode(JSON.stringify({ query: minifiedQuery, variables }));
+  const data = encoder.encode(string);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   return Array.from(new Uint8Array(hashBuffer))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
+}
+
+export async function getNormalizedQueryKey(query: string, variables: object) {
+  const minifiedQuery = compress(query);
+
+  const queryKey = await hash(minifiedQuery + JSON.stringify(variables));
+
+  return queryKey;
 }
 
 export async function cache(queryKey: string, data: object) {

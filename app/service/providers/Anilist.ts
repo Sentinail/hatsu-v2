@@ -1,11 +1,186 @@
 'use client'
 
 import axios from "axios";
-import { cache, getCached, getNormalizedQueryKey } from "../local_db/cache";
+import { cache, getCached, getNormalizedQueryKey, hash } from "../local_db/cache";
 import moment from "moment";
 
 class Anilist {
     readonly baseUrl = 'https://graphql.anilist.co';
+    readonly apiUrl = 'https://consumet-org-api-59hc.vercel.app';
+
+    fetchAnimeInfo = async ({
+        id,
+        isCached = false,
+    }: {
+        id: string;
+        isCached?: boolean;
+    } = {
+        id: '',
+        isCached: false,
+    }) => {
+        try {
+            const query = `
+                query($mediaId: Int) {
+                    Media(id: $mediaId) {
+                        id
+                        title {
+                        romaji
+                        english
+                        native
+                        userPreferred
+                        }
+                        description
+                        bannerImage
+                        coverImage {
+                            extraLarge
+                            large
+                            medium
+                            color
+                            }
+                        format
+                        episodes
+                        status
+                        startDate {
+                            day
+                            month
+                            year
+                            }
+                        season
+                        studios {
+                            nodes {
+                                name
+                            }
+                        }
+                        genres
+                        duration
+                        averageScore
+                        popularity
+                        relations {
+                            nodes {
+                                id
+                                title {
+                                    romaji
+                                    english
+                                    native
+                                    userPreferred
+                                }
+                                description
+                                bannerImage
+                                format
+                                coverImage {
+                                    extraLarge
+                                    large
+                                    medium
+                                    color
+                                }
+                                genres
+                                averageScore
+                                season
+                            }
+                        }
+                        characters {
+                            nodes {
+                                id
+                                name {
+                                first
+                                middle
+                                last
+                                full
+                                native
+                                alternative
+                                alternativeSpoiler
+                                userPreferred
+                                }
+                                image {
+                                large
+                                medium
+                                }
+                                gender
+                            }
+                        }
+                    }
+                }
+            `
+
+            const variables = {
+                mediaId: id,
+            }
+
+            if (isCached) {
+                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
+
+                const cachedData = await getCached(normalizedQueryKey);
+
+                if (cachedData) {
+                    return cachedData;
+
+                }
+            }
+
+            const response = await axios.post(this.baseUrl, {
+                query,
+                variables,
+            });
+
+            if (isCached) {
+                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
+
+                await cache(normalizedQueryKey, response.data);
+            }
+
+            return response.data
+        } catch (e) {
+            console.log('Failed to fetch anime info', { e });
+
+        }
+    }
+
+    fetchAnimeEpisodes = async ({
+        id,
+        isCached = false,
+    }: {
+        id: string;
+        isCached?: boolean;
+    } = {
+        id: '',
+        isCached: false,
+    }) => {
+        try {
+            const url = `${this.apiUrl}/meta/anilist/episodes/${id}`;
+            const params = {
+                provider: "zoro",
+            };
+
+            if (isCached) {
+                const hashedUrl = await hash(url + JSON.stringify(params));
+
+                const cachedData = await getCached(hashedUrl);
+
+                if (cachedData) {
+                    return cachedData;
+
+                }
+            }
+
+            const response = await axios.get(url, {
+                params: {
+                    provider: "zoro",
+                },
+            });
+
+            if (isCached) {
+                const hashedUrl = await hash(url + JSON.stringify(params));
+
+                await cache(hashedUrl, response.data);
+            }
+
+            return response.data;
+        }
+        catch (e) {
+            console.log('Failed to fetch anime episodes', { e });
+
+        }
+    }
 
     fetchPopularAnime = async ({
         page = 1,
