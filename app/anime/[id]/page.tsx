@@ -174,7 +174,7 @@ export default function AnimePage() {
     : "Unknown"
 
   // Format related anime
-  const relatedAnime = animeInfo.relations?.nodes || []
+  const relatedAnime: { mediaRecommendation: any }[] = animeInfo.recommendations?.nodes || []
 
   // Format characters
   const characters = animeInfo.characters?.nodes || []
@@ -307,7 +307,7 @@ export default function AnimePage() {
                   value="related"
                   className="py-3 px-6 rounded-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-purple-500 data-[state=active]:shadow-none"
                 >
-                  Related Anime
+                  Recommended 
                 </TabsTrigger>
               </TabsList>
 
@@ -359,7 +359,7 @@ export default function AnimePage() {
                               className="object-cover"
                             />
                             <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity">
-                              <Link href={episode.url || "#"} target="_blank" rel="noopener noreferrer">
+                              <Link href={`/watch/${episode.id}`|| "#"}>
                                 <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
                                   <Play size={16} />
                                 </Button>
@@ -425,20 +425,20 @@ export default function AnimePage() {
               <TabsContent value="related" className="mt-6">
                 {relatedAnime.length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-                    {relatedAnime.map((anime: any) => (
-                      <Link href={`/anime/${anime.id}`} key={anime.id} className="group">
+                    {relatedAnime.map(({ mediaRecommendation }) => (
+                      <Link href={`/anime/${mediaRecommendation.id}`} key={mediaRecommendation.id} className="group">
                         <div className="relative aspect-[2/3] rounded-lg overflow-hidden mb-2">
                           <Image
-                            src={anime.coverImage?.medium || "/placeholder.svg?height=300&width=200"}
-                            alt={anime.title?.userPreferred || anime.title?.english || "Related anime"}
+                            src={mediaRecommendation.coverImage?.large || "/placeholder.svg?height=300&width=200"}
+                            alt={mediaRecommendation.title?.userPreferred || mediaRecommendation.title?.english || "Related anime"}
                             fill
                             className="object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                         </div>
                         <h3 className="font-medium text-sm line-clamp-1">
-                          {anime.title?.userPreferred || anime.title?.english || anime.title?.romaji}
+                          {mediaRecommendation.title?.userPreferred || mediaRecommendation.title?.english || mediaRecommendation.title?.romaji}
                         </h3>
-                        <p className="text-zinc-400 text-xs">{anime.format || "Anime"}</p>
+                        <p className="text-zinc-400 text-xs">{mediaRecommendation.format || "Anime"}</p>
                       </Link>
                     ))}
                   </div>
@@ -449,10 +449,10 @@ export default function AnimePage() {
             </Tabs>
           </div>
 
-          {/* Recommendations */}
+          {/* Trending */}
           <section className="mt-16 mb-12">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">You May Also Like</h2>
+              <h2 className="text-2xl font-bold">Trending Now</h2>
               <Link href="/recommendations" className="text-sm text-purple-400 hover:text-purple-300">
                 View More
               </Link>

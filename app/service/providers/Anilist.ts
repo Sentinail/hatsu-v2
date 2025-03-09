@@ -1,437 +1,503 @@
 'use client'
 
-import axios from "axios";
-import { cache, getCached, getNormalizedQueryKey, hash } from "../local_db/cache";
-import moment from "moment";
+import axios from 'axios'
+import {
+  cache,
+  getCached,
+  getNormalizedQueryKey,
+  hash,
+} from '../local_db/cache'
+import moment from 'moment'
 
 class Anilist {
-    readonly baseUrl = 'https://graphql.anilist.co';
-    readonly apiUrl = 'https://consumet-org-api-59hc.vercel.app';
+  readonly baseUrl = 'https://graphql.anilist.co'
+  readonly apiUrl = 'https://consumet-org-api-59hc.vercel.app'
 
-    fetchAnimeInfo = async ({
-        id,
-        isCached = false,
-    }: {
-        id: string;
-        isCached?: boolean;
-    } = {
-        id: '',
-        isCached: false,
-    }) => {
-        try {
-            const query = `
-                query($mediaId: Int) {
-                    Media(id: $mediaId) {
-                        id
-                        title {
-                        romaji
-                        english
-                        native
-                        userPreferred
-                        }
-                        description
-                        bannerImage
-                        coverImage {
-                            extraLarge
-                            large
-                            medium
-                            color
-                            }
-                        format
-                        episodes
-                        status
-                        startDate {
-                            day
-                            month
-                            year
-                            }
-                        season
-                        studios {
-                            nodes {
-                                name
-                            }
-                        }
-                        genres
-                        duration
-                        averageScore
-                        popularity
-                        relations {
-                            nodes {
-                                id
-                                title {
-                                    romaji
-                                    english
-                                    native
-                                    userPreferred
-                                }
-                                description
-                                bannerImage
-                                format
-                                coverImage {
-                                    extraLarge
-                                    large
-                                    medium
-                                    color
-                                }
-                                genres
-                                averageScore
-                                season
-                            }
-                        }
-                        characters {
-                            nodes {
-                                id
-                                name {
-                                first
-                                middle
-                                last
-                                full
-                                native
-                                alternative
-                                alternativeSpoiler
-                                userPreferred
-                                }
-                                image {
-                                large
-                                medium
-                                }
-                                gender
-                            }
-                        }
-                    }
-                }
-            `
+  fetchEpisodeStream = async ({
+    id,
+    isCached = false
+  }: {
+    id: string,
+    isCached?: boolean
+  } = {
+    id: '',
+    isCached: false
+  }) => {
+    try {
+      const url = `${this.apiUrl}/meta/anilist/watch/${id}`
 
-            const variables = {
-                mediaId: id,
-            }
+      const params = {
+        provider: 'zoro',
+      }
 
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
+      const hashedUrl = await hash(url + JSON.stringify(params))
 
-                const cachedData = await getCached(normalizedQueryKey);
+      if (isCached) {
+        const cachedData = await getCached(hashedUrl)
 
-                if (cachedData) {
-                    return cachedData;
-
-                }
-            }
-
-            const response = await axios.post(this.baseUrl, {
-                query,
-                variables,
-            });
-
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
-
-                await cache(normalizedQueryKey, response.data);
-            }
-
-            return response.data
-        } catch (e) {
-            console.log('Failed to fetch anime info', { e });
-
+        if (cachedData) {
+          return cachedData
         }
+      }
+
+      const response = await axios.get(url, {
+        params: {
+          provider: 'zoro',
+        },
+      })
+
+      if (isCached) {
+        await cache(hashedUrl, response.data)
+
+      }
+
+      return response.data
+
+    } catch (e) {
+      console.log('Failed to fetch episode stream', { e })
+
     }
+  }
 
-    fetchAnimeEpisodes = async ({
-        id,
-        isCached = false,
+  fetchAnimeInfo = async (
+    {
+      id,
+      isCached = false,
     }: {
-        id: string;
-        isCached?: boolean;
+      id: string
+      isCached?: boolean
     } = {
-        id: '',
-        isCached: false,
-    }) => {
-        try {
-            const url = `${this.apiUrl}/meta/anilist/episodes/${id}`;
-            const params = {
-                provider: "zoro",
-            };
-
-            if (isCached) {
-                const hashedUrl = await hash(url + JSON.stringify(params));
-
-                const cachedData = await getCached(hashedUrl);
-
-                if (cachedData) {
-                    return cachedData;
-
-                }
-            }
-
-            const response = await axios.get(url, {
-                params: {
-                    provider: "zoro",
-                },
-            });
-
-            if (isCached) {
-                const hashedUrl = await hash(url + JSON.stringify(params));
-
-                await cache(hashedUrl, response.data);
-            }
-
-            return response.data;
-        }
-        catch (e) {
-            console.log('Failed to fetch anime episodes', { e });
-
-        }
+      id: '',
+      isCached: false,
     }
-
-    fetchPopularAnime = async ({
-        page = 1,
-        perPage = 6,
-        isCached = false,
-    }: {
-        page?: number;
-        perPage?: number;
-        isCached?: boolean;
-    } = {
-            page: 1,
-            perPage: 6,
-            isCached: false,
-        }) => {
-        try {
-            const query = `
-                query Query($page: Int, $perPage: Int, $sort: [MediaSort]) {
-                    Page(page: $page, perPage: $perPage) {
-                        media(sort: $sort) {
-                            id
-                            title {
-                                english
-                                native
-                                romaji
-                                userPreferred
-                            }
-                            description
-                            bannerImage
-                            coverImage {
-                                large
-                                color
-                                extraLarge
-                                medium
-                            }
-                            genres
-                            averageScore
-                            season
-                        }
-                    }
+  ) => {
+    try {
+      const query = /* GraphQL */ `
+        query ($mediaId: Int, $sort: [RecommendationSort]) {
+          Media(id: $mediaId) {
+            id
+            title {
+              romaji
+              english
+              native
+              userPreferred
+            }
+            description
+            bannerImage
+            coverImage {
+              extraLarge
+              large
+              medium
+              color
+            }
+            format
+            episodes
+            status
+            startDate {
+              day
+              month
+              year
+            }
+            season
+            studios {
+              nodes {
+                name
+              }
+            }
+            genres
+            duration
+            averageScore
+            popularity
+            characters {
+              nodes {
+                id
+                name {
+                  first
+                  middle
+                  last
+                  full
+                  native
+                  alternative
+                  alternativeSpoiler
+                  userPreferred
                 }
-            `
-
-            const variables = {
-                page,
-                perPage,
-                sort: 'POPULARITY_DESC',
-            }
-
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
-
-                const cachedData = await getCached(normalizedQueryKey);
-
-                if (cachedData) {
-                    return cachedData;
-
+                image {
+                  large
+                  medium
                 }
+                gender
+              }
             }
-
-            const response = await axios.post(this.baseUrl, {
-                query,
-                variables,
-            });
-
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
-
-                await cache(normalizedQueryKey, response.data);
+            recommendations(sort: $sort) {
+              nodes {
+                mediaRecommendation {
+                  id
+                  title {
+                    romaji
+                    english
+                    native
+                    userPreferred
+                  }
+                  format
+                  coverImage {
+                    extraLarge
+                    large
+                    medium
+                    color
+                  }
+                }
+              }
             }
-
-            return response.data
-        } catch (e) {
-            console.log('Failed to fetch popular anime', { e });
-
+          }
         }
-    }
+      `
 
-    fetchLatestReleaseAnime = async ({
-        page = 1,
-        perPage = 6,
-        isCached = false,
-    }: {
-        page?: number;
-        perPage?: number;
-        isCached?: boolean;
-    } = {
-            page: 1,
-            perPage: 6,
-            isCached: false,
-        }) => {
-        try {
-            const query = `
-                query Query($page: Int, $perPage: Int, $sort: [MediaSort], $statusIn: [MediaStatus], $type: MediaType, $isAdult: Boolean) {
-                    Page(page: $page, perPage: $perPage) {
-                        media(sort: $sort, status_in: $statusIn, type: $type, isAdult: $isAdult) {
-                        id
-                        title {
-                            english
-                            native
-                            romaji
-                            userPreferred
-                        }
-                        description
-                        bannerImage
-                        coverImage {
-                                large
-                                color
-                                extraLarge
-                                medium
-                            }
-                        genres
-                        averageScore
-                        season
-                        type
-                        }
-                    }
-                }
-            `
+      const variables = {
+        mediaId: id,
+        sort: "RATING_DESC"
+      }
 
-            const variables = {
-                page,
-                perPage,
-                sort: "START_DATE_DESC",
-                statusIn: "RELEASING",
-                type: "ANIME",
-                isAdult: false,
-            }
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
 
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
+        const cachedData = await getCached(normalizedQueryKey)
 
-                const cachedData = await getCached(normalizedQueryKey);
-
-                if (cachedData) {
-                    return cachedData;
-
-                }
-            }
-
-            const response = await axios.post(this.baseUrl, {
-                query,
-                variables,
-            });
-
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
-
-                await cache(normalizedQueryKey, response.data);
-            }
-
-            return response.data
-        } catch (e) {
-            console.log('Failed to fetch latest release anime', { e });
-
+        if (cachedData) {
+          return cachedData
         }
+      }
+
+      const response = await axios.post(this.baseUrl, {
+        query,
+        variables,
+      })
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        await cache(normalizedQueryKey, response.data)
+      }
+
+      return response.data
+    } catch (e) {
+      console.log('Failed to fetch anime info', { e })
     }
+  }
 
-    fetchTrendingAnime = async ({
-        page = 1,
-        perPage = 6,
-        isCached = false,
+  fetchAnimeEpisodes = async (
+    {
+      id,
+      isCached = false,
     }: {
-        page?: number;
-        perPage?: number;
-        isCached?: boolean;
+      id: string
+      isCached?: boolean
     } = {
-            page: 1,
-            perPage: 6,
-            isCached: false,
-        }) => {
-        try {
-            const query = `
-                query Query($page: Int, $perPage: Int, $sort: [MediaSort]) {
-                    Page(page: $page, perPage: $perPage) {
-                        media(sort: $sort) {
-                            id
-                            title {
-                                english
-                                native
-                                romaji
-                                userPreferred
-                            }
-                            description
-                            bannerImage
-                            coverImage {
-                                large
-                                color
-                                extraLarge
-                                medium
-                            }
-                            genres
-                            averageScore
-                            season
-                        }
-                    }
-                }
-            `
+      id: '',
+      isCached: false,
+    }
+  ) => {
+    try {
+      const url = `${this.apiUrl}/meta/anilist/episodes/${id}`
 
-            const variables = {
-                page,
-                perPage,
-                sort: 'TRENDING_DESC',
-            }
+      const params = {
+        provider: 'zoro',
+      }
 
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
+      if (isCached) {
+        const hashedUrl = await hash(url + JSON.stringify(params))
 
-                const cachedData = await getCached(normalizedQueryKey);
+        const cachedData = await getCached(hashedUrl)
 
-                if (cachedData) {
-                    return cachedData;
-
-                }
-            }
-
-            const response = await axios.post(this.baseUrl, {
-                query,
-                variables,
-            });
-
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
-
-                await cache(normalizedQueryKey, response.data);
-            }
-
-            return response.data
-        } catch (e) {
-            console.log('Failed to fetch trending anime', { e });
-
+        if (cachedData) {
+          return cachedData
         }
+      }
+
+      const response = await axios.get(url, {
+        params: {
+          provider: 'zoro',
+        },
+      })
+
+      if (isCached) {
+        const hashedUrl = await hash(url + JSON.stringify(params))
+
+        await cache(hashedUrl, response.data)
+      }
+
+      return response.data
+    } catch (e) {
+      console.log('Failed to fetch anime episodes', { e })
     }
+  }
 
-    fetchUpcomingEpisodes = async ({
-        page = 1,
-        perPage = 4,
-        isCached = false,
+  fetchPopularAnime = async (
+    {
+      page = 1,
+      perPage = 6,
+      isCached = false,
     }: {
-        page?: number;
-        perPage?: number;
-        isCached?: boolean;
+      page?: number
+      perPage?: number
+      isCached?: boolean
     } = {
-            page: 1,
-            perPage: 4,
-            isCached: false,
-        }) => {
-        try {
-            const secondsUnixEpoc = moment().startOf("hour").unix();
-            const secondsUnixWeek = moment().subtract(7, "days").startOf("hour").unix();
+      page: 1,
+      perPage: 6,
+      isCached: false,
+    }
+  ) => {
+    try {
+      const query = /* GraphQL */ `
+        query Query($page: Int, $perPage: Int, $sort: [MediaSort]) {
+          Page(page: $page, perPage: $perPage) {
+            media(sort: $sort) {
+              id
+              title {
+                english
+                native
+                romaji
+                userPreferred
+              }
+              description
+              bannerImage
+              coverImage {
+                large
+                color
+                extraLarge
+                medium
+              }
+              genres
+              averageScore
+              season
+            }
+          }
+        }
+      `
 
-            const query = `
+      const variables = {
+        page,
+        perPage,
+        sort: 'POPULARITY_DESC',
+      }
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        const cachedData = await getCached(normalizedQueryKey)
+
+        if (cachedData) {
+          return cachedData
+        }
+      }
+
+      const response = await axios.post(this.baseUrl, {
+        query,
+        variables,
+      })
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        await cache(normalizedQueryKey, response.data)
+      }
+
+      return response.data
+    } catch (e) {
+      console.log('Failed to fetch popular anime', { e })
+    }
+  }
+
+  fetchLatestReleaseAnime = async (
+    {
+      page = 1,
+      perPage = 6,
+      isCached = false,
+    }: {
+      page?: number
+      perPage?: number
+      isCached?: boolean
+    } = {
+      page: 1,
+      perPage: 6,
+      isCached: false,
+    }
+  ) => {
+    try {
+      const query = /* GraphQL */ `
+        query Query(
+          $page: Int
+          $perPage: Int
+          $sort: [MediaSort]
+          $statusIn: [MediaStatus]
+          $type: MediaType
+          $isAdult: Boolean
+        ) {
+          Page(page: $page, perPage: $perPage) {
+            media(
+              sort: $sort
+              status_in: $statusIn
+              type: $type
+              isAdult: $isAdult
+            ) {
+              id
+              title {
+                english
+                native
+                romaji
+                userPreferred
+              }
+              description
+              bannerImage
+              coverImage {
+                large
+                color
+                extraLarge
+                medium
+              }
+              genres
+              averageScore
+              season
+              type
+            }
+          }
+        }
+      `
+
+      const variables = {
+        page,
+        perPage,
+        sort: 'START_DATE_DESC',
+        statusIn: 'RELEASING',
+        type: 'ANIME',
+        isAdult: false,
+      }
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        const cachedData = await getCached(normalizedQueryKey)
+
+        if (cachedData) {
+          return cachedData
+        }
+      }
+
+      const response = await axios.post(this.baseUrl, {
+        query,
+        variables,
+      })
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        await cache(normalizedQueryKey, response.data)
+      }
+
+      return response.data
+    } catch (e) {
+      console.log('Failed to fetch latest release anime', { e })
+    }
+  }
+
+  fetchTrendingAnime = async (
+    {
+      page = 1,
+      perPage = 6,
+      isCached = false,
+    }: {
+      page?: number
+      perPage?: number
+      isCached?: boolean
+    } = {
+      page: 1,
+      perPage: 6,
+      isCached: false,
+    }
+  ) => {
+    try {
+      const query = /* GraphQL */ `
+        query Query($page: Int, $perPage: Int, $sort: [MediaSort]) {
+          Page(page: $page, perPage: $perPage) {
+            media(sort: $sort) {
+              id
+              title {
+                english
+                native
+                romaji
+                userPreferred
+              }
+              description
+              bannerImage
+              coverImage {
+                large
+                color
+                extraLarge
+                medium
+              }
+              genres
+              averageScore
+              season
+            }
+          }
+        }
+      `
+
+      const variables = {
+        page,
+        perPage,
+        sort: 'TRENDING_DESC',
+      }
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        const cachedData = await getCached(normalizedQueryKey)
+
+        if (cachedData) {
+          return cachedData
+        }
+      }
+
+      const response = await axios.post(this.baseUrl, {
+        query,
+        variables,
+      })
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        await cache(normalizedQueryKey, response.data)
+      }
+
+      return response.data
+    } catch (e) {
+      console.log('Failed to fetch trending anime', { e })
+    }
+  }
+
+  fetchUpcomingEpisodes = async (
+    {
+      page = 1,
+      perPage = 4,
+      isCached = false,
+    }: {
+      page?: number
+      perPage?: number
+      isCached?: boolean
+    } = {
+      page: 1,
+      perPage: 4,
+      isCached: false,
+    }
+  ) => {
+    try {
+      const secondsUnixEpoc = moment().startOf('hour').unix()
+      const secondsUnixWeek = moment()
+        .subtract(7, 'days')
+        .startOf('hour')
+        .unix()
+
+      const query = /* GraphQL */ `
                 query Query($page: Int, $perPage: Int, $sort: [AiringSort]) {
                     Page(page: $page, perPage: $perPage) {
                         airingSchedules(sort: $sort airingAt_lesser: ${secondsUnixEpoc}, airingAt_greater: ${secondsUnixWeek}) {
@@ -458,40 +524,38 @@ class Anilist {
                 }
             `
 
-            const variables = {
-                page,
-                perPage,
-                sort: 'TIME_DESC',
-            }
+      const variables = {
+        page,
+        perPage,
+        sort: 'TIME_DESC',
+      }
 
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
 
-                const cachedData = await getCached(normalizedQueryKey);
+        const cachedData = await getCached(normalizedQueryKey)
 
-                if (cachedData) {
-                    return cachedData;
-
-                }
-            }
-
-            const response = await axios.post(this.baseUrl, {
-                query,
-                variables,
-            });
-
-            if (isCached) {
-                const normalizedQueryKey = await getNormalizedQueryKey(query, variables);
-
-                await cache(normalizedQueryKey, response.data);
-            }
-
-            return response.data
-        } catch (e) {
-            console.log('Failed to fetch upcoming episodes', { e });
-
+        if (cachedData) {
+          return cachedData
         }
-    }
-};
+      }
 
-export default Anilist;
+      const response = await axios.post(this.baseUrl, {
+        query,
+        variables,
+      })
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        await cache(normalizedQueryKey, response.data)
+      }
+
+      return response.data
+    } catch (e) {
+      console.log('Failed to fetch upcoming episodes', { e })
+    }
+  }
+}
+
+export default Anilist
