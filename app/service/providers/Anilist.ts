@@ -13,16 +13,149 @@ class Anilist {
   readonly baseUrl = 'https://graphql.anilist.co'
   readonly apiUrl = 'https://consumet-org-api-59hc.vercel.app'
 
-  fetchEpisodeStream = async ({
-    id,
-    isCached = false
-  }: {
-    id: string,
-    isCached?: boolean
-  } = {
-    id: '',
-    isCached: false
-  }) => {
+  searchAnime = async (
+    {
+      search = '',
+      page = 1,
+      perPage = 10,
+      formatNotIn = [],
+      sort = 'POPULARITY_DESC',
+      genreIn = [],
+      statusIn = [],
+      isCached = false,
+    }: {
+      search?: string
+      page?: number
+      perPage?: number
+      formatNotIn?: string[]
+      sort?: string
+      genreIn?: string[]
+      statusIn?: string[]
+      isCached?: boolean
+    } = {
+      search: '',
+      page: 1,
+      perPage: 10,
+      formatNotIn: [],
+      sort: 'POPULARITY_DESC',
+      genreIn: [],
+      statusIn: [],
+      isCached: false,
+    }
+  ) => {
+    try {
+      console.log("Running Query")
+
+      const query = /* GraphQL */ `
+        query (
+          $search: String
+          $page: Int
+          $perPage: Int
+          $formatNotIn: [MediaFormat]
+          $sort: [MediaSort]
+          $genreIn: [String]
+          $statusIn: [MediaStatus]
+        ) {
+          Page(page: $page, perPage: $perPage) {
+            pageInfo {
+              total
+              currentPage
+              lastPage
+              hasNextPage
+              perPage
+            }
+            media(
+              search: $search
+              format_not_in: $formatNotIn
+              sort: $sort
+              genre_in: $genreIn
+              status_in: $statusIn
+            ) {
+              id
+              title {
+                english
+                native
+                romaji
+                userPreferred
+              }
+              description
+              bannerImage
+              coverImage {
+                large
+                color
+                extraLarge
+                medium
+              }
+              format
+              status
+              genres
+              averageScore
+              season
+              seasonYear
+              episodes
+              duration
+              popularity
+            }
+          }
+        }
+      `
+
+      const variables: any = {
+        page,
+        perPage,
+        sort,
+        formatNotIn: [
+          "MANGA",
+          "MUSIC",
+          "NOVEL",
+          "ONE_SHOT"
+        ],
+      };
+
+      if (search) variables.search = search;
+      if (formatNotIn.length) variables.formatNotIn = formatNotIn;
+      if (genreIn.length) variables.genreIn = genreIn;
+      if (statusIn.length) variables.statusIn = statusIn;
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        const cachedData = await getCached(normalizedQueryKey)
+
+        if (cachedData) {
+          return cachedData
+        }
+      }
+
+      const response = await axios.post(this.baseUrl, {
+        query,
+        variables,
+      })
+
+      if (isCached) {
+        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+
+        await cache(normalizedQueryKey, response.data)
+      }
+
+      return response.data
+    } catch (e) {
+      console.log('Failed to search anime', { e })
+    }
+  }
+
+  fetchEpisodeStream = async (
+    {
+      id,
+      isCached = false,
+    }: {
+      id: string
+      isCached?: boolean
+    } = {
+      id: '',
+      isCached: false,
+    }
+  ) => {
     try {
       const url = `${this.apiUrl}/meta/anilist/watch/${id}`
 
@@ -48,11 +181,9 @@ class Anilist {
 
       if (isCached) {
         await cache(hashedUrl, response.data)
-
       }
 
       return response.data
-
     } catch (e) {
       console.log('Failed to fetch episode stream', { e })
 
@@ -154,7 +285,7 @@ class Anilist {
 
       const variables = {
         mediaId: id,
-        sort: "RATING_DESC"
+        sort: 'RATING_DESC',
       }
 
       if (isCached) {
@@ -266,6 +397,7 @@ class Anilist {
                 extraLarge
                 medium
               }
+              status
               genres
               averageScore
               season
@@ -354,6 +486,7 @@ class Anilist {
                 extraLarge
                 medium
               }
+              status
               genres
               averageScore
               season
@@ -434,6 +567,7 @@ class Anilist {
                 extraLarge
                 medium
               }
+              status
               genres
               averageScore
               season
@@ -515,6 +649,7 @@ class Anilist {
                                     medium
                                     color
                                 }
+                                status
                             }
                             episode
                             timeUntilAiring

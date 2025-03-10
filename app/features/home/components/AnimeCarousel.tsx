@@ -1,17 +1,21 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useCallback } from "react"
-import Image from "next/image"
-import { ChevronLeft, ChevronRight, Play } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import sanitizeHtml from 'sanitize-html';
+import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
+import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import sanitizeHtml from 'sanitize-html'
+import Link from 'next/link'
 
 interface AnimeCarouselProps {
   animeList: any[]
   isLoading?: boolean
 }
 
-export default function AnimeCarousel({ animeList = [], isLoading = false }: AnimeCarouselProps) {
+export default function AnimeCarousel({
+  animeList = [],
+  isLoading = false,
+}: AnimeCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
 
   const nextSlide = useCallback(() => {
@@ -86,7 +90,9 @@ export default function AnimeCarousel({ animeList = [], isLoading = false }: Ani
           <div
             key={anime.id}
             className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? "opacity-100" : "opacity-0 pointer-events-none"
+              index === currentSlide
+                ? 'opacity-100'
+                : 'opacity-0 pointer-events-none'
             }`}
           >
             {/* Gradient overlay */}
@@ -94,8 +100,12 @@ export default function AnimeCarousel({ animeList = [], isLoading = false }: Ani
 
             {/* Background image */}
             <Image
-              src={anime.bannerImage || "https://placehold.co/600x1200"}
-              alt={anime.title.userPreferred || anime.title.english || anime.title.romaji}
+              src={anime.bannerImage || 'https://placehold.co/600x1200'}
+              alt={
+                anime.title.userPreferred ||
+                anime.title.english ||
+                anime.title.romaji
+              }
               fill
               className="object-cover"
               priority={index === currentSlide}
@@ -106,28 +116,45 @@ export default function AnimeCarousel({ animeList = [], isLoading = false }: Ani
               <div className="max-w-2xl">
                 <div className="flex gap-2 mb-3">
                   {anime.genres.slice(0, 3).map((genre: string) => (
-                    <span key={genre} className="text-xs px-2 py-1 bg-purple-600/80 rounded-full">
+                    <span
+                      key={genre}
+                      className="text-xs px-2 py-1 bg-purple-600/80 rounded-full"
+                    >
                       {genre}
                     </span>
                   ))}
                   {anime.season && (
-                    <span className="text-xs px-2 py-1 bg-zinc-700/80 rounded-full">{anime.season}</span>
+                    <span className="text-xs px-2 py-1 bg-zinc-700/80 rounded-full">
+                      {anime.season}
+                    </span>
                   )}
                 </div>
 
                 <h1 className="text-3xl md:text-5xl font-bold mb-3">
-                  {anime.title.userPreferred || anime.title.english || anime.title.romaji}
+                  {anime.title.userPreferred ||
+                    anime.title.english ||
+                    anime.title.romaji}
                 </h1>
 
-                <p className="text-zinc-300 mb-6 line-clamp-3" dangerouslySetInnerHTML={{
-                  __html: sanitizeHtml(anime.description) || "No description available."
-                }} />
+                <p
+                  className="text-zinc-300 mb-6 line-clamp-3"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      sanitizeHtml(anime.description) ||
+                      'No description available.',
+                  }}
+                />
 
                 <div className="flex gap-4">
-                  <Button className="bg-purple-600 hover:bg-purple-700">
-                    <Play size={16} className="mr-2" /> Watch Now
-                  </Button>
-                  <Button variant="outline" className="border-zinc-700 text-white hover:bg-zinc-800">
+                  <Link href={`/anime/${anime.id}`}>
+                    <Button className="bg-purple-600 hover:bg-purple-700 hover:cursor-pointer">
+                      <Play size={16} className="mr-2" /> Watch Now
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="border-zinc-700 text-black hover:cursor-pointer"
+                  >
                     + Add to List
                   </Button>
                 </div>
@@ -161,7 +188,7 @@ export default function AnimeCarousel({ animeList = [], isLoading = false }: Ani
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`w-2 h-2 rounded-full transition-all ${
-              index === currentSlide ? "w-6 bg-purple-500" : "bg-white/50"
+              index === currentSlide ? 'w-6 bg-purple-500' : 'bg-white/50'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
@@ -170,4 +197,3 @@ export default function AnimeCarousel({ animeList = [], isLoading = false }: Ani
     </div>
   )
 }
-

@@ -27,10 +27,11 @@ interface WatchPageProps {
 }
 
 export default function WatchPage() {
-  const params: WatchPageProps = useParams<{id: string}>()
+  const params: WatchPageProps = useParams<{ id: string }>()
   const router = useRouter()
   const videoRef = useRef<HTMLVideoElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const hlsRef = useRef<Hls | null>(null)
   const [episodeData, setEpisodeData] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -93,10 +94,16 @@ export default function WatchPage() {
       episodeData.sources.find((s: any) => s.isM3U8) || episodeData.sources[0]
 
     if (Hls.isSupported() && source.isM3U8) {
-      console.log(process.env.NEXT_PUBLIC_PROXY_URL)
-
+      // Create a new HLS instance
       const hls = new Hls()
-      hls.loadSource(`${process.env.NEXT_PUBLIC_PROXY_URL}/hianime-hls-proxy?url=${source.url}`)
+      hlsRef.current = hls
+
+      // Use proxy URL if available
+      const sourceUrl = process.env.NEXT_PUBLIC_PROXY_URL
+        ? `${process.env.NEXT_PUBLIC_PROXY_URL}/hianime-hls-proxy?url=${source.url}`
+        : source.url
+
+      hls.loadSource(sourceUrl)
       hls.attachMedia(video)
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         // Auto play when loaded
@@ -127,11 +134,23 @@ export default function WatchPage() {
     video.addEventListener('volumechange', onVolumeChange)
 
     return () => {
+      // Clean up event listeners
       video.removeEventListener('timeupdate', onTimeUpdate)
       video.removeEventListener('durationchange', onDurationChange)
       video.removeEventListener('play', onPlay)
       video.removeEventListener('pause', onPause)
       video.removeEventListener('volumechange', onVolumeChange)
+
+      // Clean up HLS instance
+      if (hlsRef.current) {
+        hlsRef.current.destroy()
+        hlsRef.current = null
+      }
+
+      // Stop video and clear source
+      video.pause()
+      video.src = ''
+      video.load()
     }
   }, [episodeData])
 
@@ -164,6 +183,24 @@ export default function WatchPage() {
       }
     }
   }, [isPlaying])
+
+  // Clean up everything when component unmounts
+  useEffect(() => {
+    return () => {
+      // This ensures we clean up everything when navigating away
+      if (hlsRef.current) {
+        hlsRef.current.destroy()
+        hlsRef.current = null
+      }
+
+      if (videoRef.current) {
+        const video = videoRef.current
+        video.pause()
+        video.src = ''
+        video.load()
+      }
+    }
+  }, [])
 
   const handlePlayPause = () => {
     if (!videoRef.current) return
@@ -216,7 +253,9 @@ export default function WatchPage() {
     const secs = Math.floor(seconds % 60)
 
     if (hours > 0) {
-      return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${secs
+        .toString()
+        .padStart(2, '0')}`
     }
 
     return `${minutes}:${secs.toString().padStart(2, '0')}`
@@ -243,7 +282,7 @@ export default function WatchPage() {
         <p className="text-zinc-400 mb-6">{error}</p>
         <Button
           onClick={() => router.back()}
-          className="bg-purple-600 hover:bg-purple-700"
+          className="bg-purple-600 hover:bg-purple-700 hover:cursor-pointer"
         >
           Go Back
         </Button>
@@ -300,8 +339,22 @@ export default function WatchPage() {
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-black/30"
-              onClick={() => router.back()}
+              className="text-white hover:bg-black/30 hover:cursor-pointer"
+              onClick={() => {
+                // Clean up before navigating away
+                if (hlsRef.current) {
+                  hlsRef.current.destroy()
+                  hlsRef.current = null
+                }
+
+                if (videoRef.current) {
+                  videoRef.current.pause()
+                  videoRef.current.src = ''
+                  videoRef.current.load()
+                }
+
+                router.back()
+              }}
             >
               <ArrowLeft size={24} />
             </Button>
@@ -311,7 +364,7 @@ export default function WatchPage() {
           <div className="flex items-center justify-center">
             {showIntroSkip && (
               <Button
-                className="absolute right-8 bottom-24 bg-purple-600 hover:bg-purple-700"
+                className="absolute right-8 bottom-24 bg-purple-600 hover:bg-purple-700 hover:cursor-pointer"
                 onClick={handleSkipIntro}
               >
                 <SkipForward size={16} className="mr-2" /> Skip Intro
@@ -336,7 +389,7 @@ export default function WatchPage() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-white hover:bg-black/30"
+                  className="text-white hover:bg-black/30 hover:cursor-pointer"
                   onClick={handlePlayPause}
                 >
                   {isPlaying ? <Pause size={20} /> : <Play size={20} />}
@@ -346,7 +399,7 @@ export default function WatchPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-white hover:bg-black/30"
+                    className="text-white hover:bg-black/30 hover:cursor-pointer"
                     onClick={handleMute}
                   >
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
@@ -376,7 +429,7 @@ export default function WatchPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-white hover:bg-black/30"
+                        className="text-white hover:bg-black/30 hover:cursor-pointer"
                       >
                         <Subtitles size={20} />
                       </Button>
@@ -387,7 +440,9 @@ export default function WatchPage() {
                       </div>
                       <div className="max-h-60 overflow-y-auto">
                         <div
-                          className={`p-2 cursor-pointer hover:bg-zinc-800 ${!selectedSubtitle ? 'bg-purple-600/30' : ''}`}
+                          className={`p-2 cursor-pointer hover:bg-zinc-800 ${
+                            !selectedSubtitle ? 'bg-purple-600/30' : ''
+                          }`}
                           onClick={() => setSelectedSubtitle(null)}
                         >
                           Off
@@ -396,7 +451,11 @@ export default function WatchPage() {
                           (sub: any, index: number) => (
                             <div
                               key={index}
-                              className={`p-2 cursor-pointer hover:bg-zinc-800 ${selectedSubtitle === sub.url ? 'bg-purple-600/30' : ''}`}
+                              className={`p-2 cursor-pointer hover:bg-zinc-800 ${
+                                selectedSubtitle === sub.url
+                                  ? 'bg-purple-600/30'
+                                  : ''
+                              }`}
                               onClick={() => handleSubtitleChange(sub.url)}
                             >
                               {sub.lang}
@@ -411,7 +470,7 @@ export default function WatchPage() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-white hover:bg-black/30"
+                  className="text-white hover:bg-black/30 hover:cursor-pointer"
                   onClick={handleFullscreen}
                 >
                   <Maximize size={20} />

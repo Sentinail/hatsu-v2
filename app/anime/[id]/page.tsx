@@ -145,7 +145,7 @@ export default function AnimePage() {
           <h1 className="text-3xl font-bold mb-4">Error</h1>
           <p className="text-zinc-400 mb-6">{error}</p>
           <Link href="/">
-            <Button className="bg-purple-600 hover:bg-purple-700">Return to Home</Button>
+            <Button className="bg-purple-600 hover:bg-purple-700 hover:cursor-pointer">Return to Home</Button>
           </Link>
         </div>
       </div>
@@ -192,7 +192,7 @@ export default function AnimePage() {
               <Search size={20} />
             </Link>
             <Link href="/login">
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white">Sign In</Button>
+              <Button className="bg-purple-600 hover:bg-purple-700 text-white hover:cursor-pointer">Sign In</Button>
             </Link>
           </div>
         </div>
@@ -214,14 +214,14 @@ export default function AnimePage() {
                 <Image src={coverImage || "/placeholder.svg"} alt={title} fill className="object-cover" priority />
               </div>
               <div className="mt-4 flex flex-col gap-2">
-                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                <Button className="w-full bg-purple-600 hover:bg-purple-700 hover:cursor-pointer">
                   <Play size={16} className="mr-2" /> Watch Now
                 </Button>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" className="border-zinc-700 hover:bg-zinc-800">
+                  <Button variant="outline" className="border-zinc-700 hover:bg-zinc-800 hover:cursor-pointer">
                     <Heart size={16} className="mr-2" /> Add
                   </Button>
-                  <Button variant="outline" className="border-zinc-700 hover:bg-zinc-800">
+                  <Button variant="outline" className="border-zinc-700 hover:bg-zinc-800 hover:cursor-pointer">
                     <Share2 size={16} className="mr-2" /> Share
                   </Button>
                 </div>
@@ -360,7 +360,7 @@ export default function AnimePage() {
                             />
                             <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity">
                               <Link href={`/watch/${episode.id}`|| "#"}>
-                                <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                                <Button size="sm" className="bg-purple-600 hover:bg-purple-700 hover:cursor-pointer">
                                   <Play size={16} />
                                 </Button>
                               </Link>
@@ -381,7 +381,7 @@ export default function AnimePage() {
                                   )}
                                 </div>
                               </div>
-                              <Button size="sm" variant="ghost" className="text-zinc-400 hover:text-white">
+                              <Button size="sm" variant="ghost" className="text-zinc-400 hover:text-white hover:cursor-pointer">
                                 <List size={16} />
                               </Button>
                             </div>
