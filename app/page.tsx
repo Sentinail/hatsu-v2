@@ -660,8 +660,6 @@ export default function LandingPage() {
                 </ul>
               </div>
 
-              {console.log(upcomingEpisodes)}
-
               {/* Feature 3 - Animated Image */}
               <div className="bg-zinc-800/50 rounded-lg p-5 border border-zinc-700 hover:border-purple-500/50 transition-all hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] group">
                 <div className="relative h-40 mb-4 overflow-hidden rounded-md">
