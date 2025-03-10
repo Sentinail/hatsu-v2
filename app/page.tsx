@@ -30,7 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import Providers from './service'
+import Providers from '@/service'
 
 export default function LandingPage() {
   const [activeSlide, setActiveSlide] = useState(0)

@@ -7,9 +7,9 @@ import { Star, Play, Heart, Share2, Calendar, List, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import AnimeGrid from "@/app/features/home/components/AnimeGrid"
+import AnimeGrid from "@/features/home/components/AnimeGrid"
 import moment from "moment"
-import Providers from "@/app/service"
+import Providers from "@/service"
 import { useParams } from 'next/navigation'
 
 interface AnimePageProps {

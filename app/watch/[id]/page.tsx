@@ -20,7 +20,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import Hls from 'hls.js'
-import Providers from '@/app/service'
+import Providers from '@/service'
 
 interface WatchPageProps {
   id: string

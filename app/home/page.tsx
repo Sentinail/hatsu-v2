@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Search, Bell, Menu, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import AnimeCarousel from '../features/home/components/AnimeCarousel'
-import AnimeGrid from '../features/home/components/AnimeGrid'
-import UpcomingEpisodes from '../features/home/components/UpcomingEpisodes'
-import Providers from '../service'
+import AnimeCarousel from '@/features/home/components/AnimeCarousel'
+import AnimeGrid from '@/features/home/components/AnimeGrid'
+import UpcomingEpisodes from '@/features/home/components/UpcomingEpisodes'
+import Providers from '@/service'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
