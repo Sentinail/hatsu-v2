@@ -118,7 +118,11 @@ class Anilist {
       if (statusIn.length) variables.statusIn = statusIn;
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         const cachedData = await getCached(normalizedQueryKey)
 
@@ -133,7 +137,11 @@ class Anilist {
       })
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         await cache(normalizedQueryKey, response.data)
       }
@@ -163,7 +171,11 @@ class Anilist {
         provider: 'zoro',
       }
 
-      const hashedUrl = await hash(url + JSON.stringify(params))
+      const hashedUrl = await getNormalizedQueryKey(
+        this.baseUrl,
+        "GET",
+        params
+      )
 
       if (isCached) {
         const cachedData = await getCached(hashedUrl)
@@ -289,7 +301,11 @@ class Anilist {
       }
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         const cachedData = await getCached(normalizedQueryKey)
 
@@ -304,7 +320,11 @@ class Anilist {
       })
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         await cache(normalizedQueryKey, response.data)
       }
@@ -334,9 +354,13 @@ class Anilist {
         provider: 'zoro',
       }
 
-      if (isCached) {
-        const hashedUrl = await hash(url + JSON.stringify(params))
+      const hashedUrl = await getNormalizedQueryKey(
+        this.baseUrl,
+        "GET",
+        params
+      )
 
+      if (isCached) {
         const cachedData = await getCached(hashedUrl)
 
         if (cachedData) {
@@ -351,8 +375,6 @@ class Anilist {
       })
 
       if (isCached) {
-        const hashedUrl = await hash(url + JSON.stringify(params))
-
         await cache(hashedUrl, response.data)
       }
 
@@ -413,7 +435,11 @@ class Anilist {
       }
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         const cachedData = await getCached(normalizedQueryKey)
 
@@ -428,7 +454,11 @@ class Anilist {
       })
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         await cache(normalizedQueryKey, response.data)
       }
@@ -506,7 +536,11 @@ class Anilist {
       }
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         const cachedData = await getCached(normalizedQueryKey)
 
@@ -521,7 +555,11 @@ class Anilist {
       })
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         await cache(normalizedQueryKey, response.data)
       }
@@ -583,7 +621,11 @@ class Anilist {
       }
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         const cachedData = await getCached(normalizedQueryKey)
 
@@ -598,7 +640,11 @@ class Anilist {
       })
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         await cache(normalizedQueryKey, response.data)
       }
@@ -666,7 +712,11 @@ class Anilist {
       }
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         const cachedData = await getCached(normalizedQueryKey)
 
@@ -681,7 +731,11 @@ class Anilist {
       })
 
       if (isCached) {
-        const normalizedQueryKey = await getNormalizedQueryKey(query, variables)
+        const normalizedQueryKey = await getNormalizedQueryKey(
+          this.baseUrl,
+          "POST",
+          { query, variables }
+        )
 
         await cache(normalizedQueryKey, response.data)
       }

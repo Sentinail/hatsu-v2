@@ -27,7 +27,6 @@
     "dompurify": "^2.0.12",
     "formik": "^2.4.6",
     "framer-motion": "^12.4.10",
-    "graphql-query-compress": "^1.2.4",
     "hls.js": "^1.5.20",
     "idb": "^8.0.2",
     "lucide-react": "^0.477.0",

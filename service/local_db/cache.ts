@@ -1,6 +1,5 @@
 "use client";
 
-import compress from "graphql-query-compress";
 import { openDB, IDBPDatabase } from "idb";
 
 let dbPromise: Promise<IDBPDatabase<any>> | null = null;
@@ -16,6 +15,11 @@ if (typeof window !== "undefined") {
   });
 }
 
+// Remove ALL spaces, tabs, newlines (works for GraphQL & REST)
+function cleanString(input: string): string {
+  return input.replace(/\s+/g, ""); // Removes ALL whitespace characters
+}
+
 export async function hash(string: string) {
   const encoder = new TextEncoder();
   const data = encoder.encode(string);
@@ -25,19 +29,16 @@ export async function hash(string: string) {
     .join("");
 }
 
-export async function getNormalizedQueryKey(query: string, variables: object) {
-  const minifiedQuery = compress(query);
-
-  const queryKey = await hash(minifiedQuery + JSON.stringify(variables));
-
+export async function getNormalizedQueryKey(url: string, method: string, body?: object) {
+  const cleanedUrl = cleanString(url);
+  const cleanedBody = body ? cleanString(JSON.stringify(body)) : "";
+  const queryKey = await hash(method + cleanedUrl + cleanedBody);
   return queryKey;
 }
 
 export async function cache(queryKey: string, data: object) {
   if (!dbPromise) return; // Prevent execution on the server
-
   const db = await dbPromise;
-
   await db.put("queries", { queryKey, data, timestamp: Date.now() });
 }
 
