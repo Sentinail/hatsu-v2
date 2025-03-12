@@ -50,9 +50,9 @@ export default function WatchPage() {
         const anilist = Providers.ANILIST
         const data = await anilist.fetchEpisodeStream({
           id: params.id,
-          isCached: true,
+          isCached: false,
         })
-
+        
         if (!data || !data.sources || data.sources.length === 0) {
           throw new Error('No video sources found')
         }
