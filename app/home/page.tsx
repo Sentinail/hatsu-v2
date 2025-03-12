@@ -313,7 +313,7 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-zinc-800 text-center text-zinc-500 text-sm">
-            <p>© {new Date().getFullYear()} Hatsu. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.</p>
           </div>
         </div>
       </footer>

@@ -72,7 +72,7 @@ export default function NotFound() {
       {/* Footer */}
       <footer className="py-6 border-t border-zinc-800">
         <div className="container mx-auto px-4 text-center text-sm text-zinc-500">
-          <p>© {new Date().getFullYear()} Hatsu. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.</p>
         </div>
       </footer>
     </div>

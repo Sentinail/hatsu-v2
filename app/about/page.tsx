@@ -508,7 +508,7 @@ export default function AboutPage() {
               </Link>
             </div>
             <div className="text-zinc-500 text-sm">
-              <p>© {new Date().getFullYear()} Hatsu. All rights reserved.</p>
+              <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.</p>
               <p className="mt-1">Created by Wilson Ponseca</p>
             </div>
           </div>
