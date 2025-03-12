@@ -68,7 +68,7 @@ export default function Loading() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          Loading AnimeVerse
+          Loading Hatsu
         </motion.h2>
 
         {/* Progress bar */}

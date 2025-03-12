@@ -1,18 +1,22 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import Link from "next/link"
-import { Formik, Form, Field, ErrorMessage } from "formik"
-import * as Yup from "yup"
-import { Eye, EyeOff, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useState } from 'react'
+import Link from 'next/link'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Checkbox } from '@/components/ui/checkbox'
 
 // Validation schema
 const LoginSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email address").required("Email is required"),
-  password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required'),
   rememberMe: Yup.boolean(),
 })
 
@@ -29,12 +33,12 @@ export default function LoginPage() {
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
       // For demo purposes, always succeed
-      console.log("Login values:", values)
+      console.log('Login values:', values)
 
       // Redirect to home page after successful login
       // In a real app, you would use router.push('/home')
     } catch (error) {
-      setLoginError("Invalid email or password. Please try again.")
+      setLoginError('Invalid email or password. Please try again.')
     } finally {
       setSubmitting(false)
     }
@@ -56,7 +60,9 @@ export default function LoginPage() {
               <span className="text-3xl font-bold text-purple-500">Hatsu</span>
             </Link>
             <h1 className="mt-6 text-2xl font-bold">Welcome back</h1>
-            <p className="mt-2 text-zinc-400">Sign in to your account to continue</p>
+            <p className="mt-2 text-zinc-400">
+              Sign in to your account to continue
+            </p>
           </div>
 
           {/* Login Form */}
@@ -69,7 +75,7 @@ export default function LoginPage() {
               )}
 
               <Formik
-                initialValues={{ email: "", password: "", rememberMe: false }}
+                initialValues={{ email: '', password: '', rememberMe: false }}
                 validationSchema={LoginSchema}
                 onSubmit={handleSubmit}
               >
@@ -89,20 +95,32 @@ export default function LoginPage() {
                             type="email"
                             placeholder="Enter your email"
                             className={`bg-zinc-800 border-zinc-700 focus-visible:ring-purple-500 ${
-                              errors.email && touched.email ? "border-red-500" : ""
+                              errors.email && touched.email
+                                ? 'border-red-500'
+                                : ''
                             }`}
                           />
                         </div>
-                        <ErrorMessage name="email" component="div" className="text-red-400 text-xs mt-1" />
+                        <ErrorMessage
+                          name="email"
+                          component="div"
+                          className="text-red-400 text-xs mt-1"
+                        />
                       </div>
 
                       {/* Password Field */}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <label htmlFor="password" className="text-sm font-medium">
+                          <label
+                            htmlFor="password"
+                            className="text-sm font-medium"
+                          >
                             Password
                           </label>
-                          <Link href="/forgot-password" className="text-xs text-purple-400 hover:text-purple-300">
+                          <Link
+                            href="/forgot-password"
+                            className="text-xs text-purple-400 hover:text-purple-300"
+                          >
                             Forgot password?
                           </Link>
                         </div>
@@ -111,34 +129,51 @@ export default function LoginPage() {
                             as={Input}
                             id="password"
                             name="password"
-                            type={showPassword ? "text" : "password"}
+                            type={showPassword ? 'text' : 'password'}
                             placeholder="Enter your password"
                             className={`bg-zinc-800 border-zinc-700 focus-visible:ring-purple-500 ${
-                              errors.password && touched.password ? "border-red-500" : ""
+                              errors.password && touched.password
+                                ? 'border-red-500'
+                                : ''
                             }`}
                           />
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
-                            aria-label={showPassword ? "Hide password" : "Show password"}
+                            aria-label={
+                              showPassword ? 'Hide password' : 'Show password'
+                            }
                           >
-                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            {showPassword ? (
+                              <EyeOff size={18} />
+                            ) : (
+                              <Eye size={18} />
+                            )}
                           </button>
                         </div>
-                        <ErrorMessage name="password" component="div" className="text-red-400 text-xs mt-1" />
+                        <ErrorMessage
+                          name="password"
+                          component="div"
+                          className="text-red-400 text-xs mt-1"
+                        />
                       </div>
 
                       {/* Remember Me Checkbox */}
                       <div className="flex items-center space-x-2">
-                        <Field id="rememberMe" name="rememberMe" type="checkbox" className="hidden">
+                        <Field
+                          id="rememberMe"
+                          name="rememberMe"
+                          type="checkbox"
+                          className="hidden"
+                        >
                           {({ field, form }: any) => (
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 id="rememberMe"
                                 checked={field.value}
                                 onCheckedChange={(checked) => {
-                                  form.setFieldValue("rememberMe", checked)
+                                  form.setFieldValue('rememberMe', checked)
                                 }}
                                 className="data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500"
                               />
@@ -166,7 +201,7 @@ export default function LoginPage() {
                           Signing in...
                         </>
                       ) : (
-                        "Sign In"
+                        'Sign In'
                       )}
                     </Button>
                   </Form>
@@ -186,8 +221,11 @@ export default function LoginPage() {
               {/* Sign Up Link */}
               <div className="mt-6 text-center">
                 <p className="text-sm text-zinc-400">
-                  Don't have an account?{" "}
-                  <Link href="/register" className="font-medium text-purple-400 hover:text-purple-300">
+                  Don't have an account?{' '}
+                  <Link
+                    href="/register"
+                    className="font-medium text-purple-400 hover:text-purple-300"
+                  >
                     Sign up
                   </Link>
                 </p>
@@ -200,10 +238,18 @@ export default function LoginPage() {
       {/* Footer */}
       <footer className="py-6 border-t border-zinc-800">
         <div className="container mx-auto px-4 text-center text-sm text-zinc-500">
-          <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.</p>
+          <p>
+            © {new Date().getFullYear()} Hatsu. All rights reserved. Developed
+            by Wilson Ponseca.
+            <Link
+              href="/sitemap/sitemap.xml"
+              className="text-purple-400 hover:text-purple-300 ml-2"
+            >
+              Sitemap
+            </Link>
+          </p>
         </div>
       </footer>
     </div>
   )
 }
-

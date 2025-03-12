@@ -1,32 +1,40 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import Link from "next/link"
-import { Formik, Form, Field, ErrorMessage } from "formik"
-import * as Yup from "yup"
-import { Eye, EyeOff, Loader2, Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useState } from 'react'
+import Link from 'next/link'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
+import { Eye, EyeOff, Loader2, Check } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Checkbox } from '@/components/ui/checkbox'
 
 // Validation schema
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
-    .min(3, "Username must be at least 3 characters")
-    .max(20, "Username must be less than 20 characters")
-    .matches(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores")
-    .required("Username is required"),
-  email: Yup.string().email("Invalid email address").required("Email is required"),
+    .min(3, 'Username must be at least 3 characters')
+    .max(20, 'Username must be less than 20 characters')
+    .matches(
+      /^[a-zA-Z0-9_]+$/,
+      'Username can only contain letters, numbers, and underscores'
+    )
+    .required('Username is required'),
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/[0-9]/, "Password must contain at least one number")
-    .required("Password is required"),
+    .min(8, 'Password must be at least 8 characters')
+    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .matches(/[0-9]/, 'Password must contain at least one number')
+    .required('Password is required'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Please confirm your password"),
-  agreeTerms: Yup.boolean().oneOf([true], "You must agree to the terms and conditions"),
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Please confirm your password'),
+  agreeTerms: Yup.boolean().oneOf(
+    [true],
+    'You must agree to the terms and conditions'
+  ),
 })
 
 export default function RegisterPage() {
@@ -44,14 +52,14 @@ export default function RegisterPage() {
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
       // For demo purposes, always succeed
-      console.log("Register values:", values)
+      console.log('Register values:', values)
 
       // Show success message
       setRegistrationSuccess(true)
 
       // In a real app, you might redirect or show a verification message
     } catch (error) {
-      setRegisterError("Registration failed. Please try again.")
+      setRegisterError('Registration failed. Please try again.')
     } finally {
       setSubmitting(false)
     }
@@ -59,7 +67,7 @@ export default function RegisterPage() {
 
   // Password strength indicator
   const getPasswordStrength = (password: string) => {
-    if (!password) return { strength: 0, label: "" }
+    if (!password) return { strength: 0, label: '' }
 
     let strength = 0
     if (password.length >= 8) strength += 1
@@ -68,7 +76,7 @@ export default function RegisterPage() {
     if (/[0-9]/.test(password)) strength += 1
     if (/[^a-zA-Z0-9]/.test(password)) strength += 1
 
-    const labels = ["", "Weak", "Fair", "Good", "Strong", "Excellent"]
+    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Excellent']
 
     return {
       strength,
@@ -101,9 +109,12 @@ export default function RegisterPage() {
               <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Check size={32} className="text-green-500" />
               </div>
-              <h2 className="text-xl font-bold mb-2">Registration Successful!</h2>
+              <h2 className="text-xl font-bold mb-2">
+                Registration Successful!
+              </h2>
               <p className="text-zinc-400 mb-6">
-                Your account has been created successfully. You can now sign in with your credentials.
+                Your account has been created successfully. You can now sign in
+                with your credentials.
               </p>
               <Link href="/login">
                 <Button className="bg-purple-600 hover:bg-purple-700 hover:cursor-pointer transition-colors">
@@ -123,10 +134,10 @@ export default function RegisterPage() {
 
                 <Formik
                   initialValues={{
-                    username: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
+                    username: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: '',
                     agreeTerms: false,
                   }}
                   validationSchema={RegisterSchema}
@@ -137,7 +148,10 @@ export default function RegisterPage() {
                       <div className="space-y-4">
                         {/* Username Field */}
                         <div className="space-y-2">
-                          <label htmlFor="username" className="text-sm font-medium">
+                          <label
+                            htmlFor="username"
+                            className="text-sm font-medium"
+                          >
                             Username
                           </label>
                           <Field
@@ -147,15 +161,24 @@ export default function RegisterPage() {
                             type="text"
                             placeholder="Choose a username"
                             className={`bg-zinc-800 border-zinc-700 focus-visible:ring-purple-500 ${
-                              errors.username && touched.username ? "border-red-500" : ""
+                              errors.username && touched.username
+                                ? 'border-red-500'
+                                : ''
                             }`}
                           />
-                          <ErrorMessage name="username" component="div" className="text-red-400 text-xs mt-1" />
+                          <ErrorMessage
+                            name="username"
+                            component="div"
+                            className="text-red-400 text-xs mt-1"
+                          />
                         </div>
 
                         {/* Email Field */}
                         <div className="space-y-2">
-                          <label htmlFor="email" className="text-sm font-medium">
+                          <label
+                            htmlFor="email"
+                            className="text-sm font-medium"
+                          >
                             Email
                           </label>
                           <Field
@@ -165,15 +188,24 @@ export default function RegisterPage() {
                             type="email"
                             placeholder="Enter your email"
                             className={`bg-zinc-800 border-zinc-700 focus-visible:ring-purple-500 ${
-                              errors.email && touched.email ? "border-red-500" : ""
+                              errors.email && touched.email
+                                ? 'border-red-500'
+                                : ''
                             }`}
                           />
-                          <ErrorMessage name="email" component="div" className="text-red-400 text-xs mt-1" />
+                          <ErrorMessage
+                            name="email"
+                            component="div"
+                            className="text-red-400 text-xs mt-1"
+                          />
                         </div>
 
                         {/* Password Field */}
                         <div className="space-y-2">
-                          <label htmlFor="password" className="text-sm font-medium">
+                          <label
+                            htmlFor="password"
+                            className="text-sm font-medium"
+                          >
                             Password
                           </label>
                           <div className="relative">
@@ -181,35 +213,51 @@ export default function RegisterPage() {
                               as={Input}
                               id="password"
                               name="password"
-                              type={showPassword ? "text" : "password"}
+                              type={showPassword ? 'text' : 'password'}
                               placeholder="Create a password"
                               className={`bg-zinc-800 border-zinc-700 focus-visible:ring-purple-500 ${
-                                errors.password && touched.password ? "border-red-500" : ""
+                                errors.password && touched.password
+                                  ? 'border-red-500'
+                                  : ''
                               }`}
                             />
                             <button
                               type="button"
                               onClick={() => setShowPassword(!showPassword)}
                               className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
-                              aria-label={showPassword ? "Hide password" : "Show password"}
+                              aria-label={
+                                showPassword ? 'Hide password' : 'Show password'
+                              }
                             >
-                              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                              {showPassword ? (
+                                <EyeOff size={18} />
+                              ) : (
+                                <Eye size={18} />
+                              )}
                             </button>
                           </div>
-                          <ErrorMessage name="password" component="div" className="text-red-400 text-xs mt-1" />
+                          <ErrorMessage
+                            name="password"
+                            component="div"
+                            className="text-red-400 text-xs mt-1"
+                          />
 
                           {/* Password Strength Indicator */}
                           {values.password && (
                             <div className="mt-2">
                               <div className="flex justify-between items-center mb-1">
-                                <div className="text-xs text-zinc-400">Password strength:</div>
+                                <div className="text-xs text-zinc-400">
+                                  Password strength:
+                                </div>
                                 <div
                                   className={`text-xs ${
-                                    getPasswordStrength(values.password).strength < 3
-                                      ? "text-red-400"
-                                      : getPasswordStrength(values.password).strength < 4
-                                        ? "text-yellow-400"
-                                        : "text-green-400"
+                                    getPasswordStrength(values.password)
+                                      .strength < 3
+                                      ? 'text-red-400'
+                                      : getPasswordStrength(values.password)
+                                            .strength < 4
+                                        ? 'text-yellow-400'
+                                        : 'text-green-400'
                                   }`}
                                 >
                                   {getPasswordStrength(values.password).label}
@@ -218,13 +266,17 @@ export default function RegisterPage() {
                               <div className="h-1 w-full bg-zinc-700 rounded-full overflow-hidden">
                                 <div
                                   className={`h-full ${
-                                    getPasswordStrength(values.password).strength < 3
-                                      ? "bg-red-500"
-                                      : getPasswordStrength(values.password).strength < 4
-                                        ? "bg-yellow-500"
-                                        : "bg-green-500"
+                                    getPasswordStrength(values.password)
+                                      .strength < 3
+                                      ? 'bg-red-500'
+                                      : getPasswordStrength(values.password)
+                                            .strength < 4
+                                        ? 'bg-yellow-500'
+                                        : 'bg-green-500'
                                   }`}
-                                  style={{ width: `${getPasswordStrength(values.password).strength * 20}%` }}
+                                  style={{
+                                    width: `${getPasswordStrength(values.password).strength * 20}%`,
+                                  }}
                                 ></div>
                               </div>
                             </div>
@@ -233,7 +285,10 @@ export default function RegisterPage() {
 
                         {/* Confirm Password Field */}
                         <div className="space-y-2">
-                          <label htmlFor="confirmPassword" className="text-sm font-medium">
+                          <label
+                            htmlFor="confirmPassword"
+                            className="text-sm font-medium"
+                          >
                             Confirm Password
                           </label>
                           <div className="relative">
@@ -241,34 +296,56 @@ export default function RegisterPage() {
                               as={Input}
                               id="confirmPassword"
                               name="confirmPassword"
-                              type={showConfirmPassword ? "text" : "password"}
+                              type={showConfirmPassword ? 'text' : 'password'}
                               placeholder="Confirm your password"
                               className={`bg-zinc-800 border-zinc-700 focus-visible:ring-purple-500 ${
-                                errors.confirmPassword && touched.confirmPassword ? "border-red-500" : ""
+                                errors.confirmPassword &&
+                                touched.confirmPassword
+                                  ? 'border-red-500'
+                                  : ''
                               }`}
                             />
                             <button
                               type="button"
-                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                              onClick={() =>
+                                setShowConfirmPassword(!showConfirmPassword)
+                              }
                               className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
-                              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                              aria-label={
+                                showConfirmPassword
+                                  ? 'Hide password'
+                                  : 'Show password'
+                              }
                             >
-                              {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                              {showConfirmPassword ? (
+                                <EyeOff size={18} />
+                              ) : (
+                                <Eye size={18} />
+                              )}
                             </button>
                           </div>
-                          <ErrorMessage name="confirmPassword" component="div" className="text-red-400 text-xs mt-1" />
+                          <ErrorMessage
+                            name="confirmPassword"
+                            component="div"
+                            className="text-red-400 text-xs mt-1"
+                          />
                         </div>
 
                         {/* Terms and Conditions Checkbox */}
                         <div className="space-y-2">
-                          <Field id="agreeTerms" name="agreeTerms" type="checkbox" className="hidden">
+                          <Field
+                            id="agreeTerms"
+                            name="agreeTerms"
+                            type="checkbox"
+                            className="hidden"
+                          >
                             {({ field, form }: any) => (
                               <div className="flex items-start space-x-2">
                                 <Checkbox
                                   id="agreeTerms"
                                   checked={field.value}
                                   onCheckedChange={(checked) => {
-                                    form.setFieldValue("agreeTerms", checked)
+                                    form.setFieldValue('agreeTerms', checked)
                                   }}
                                   className="mt-1 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500"
                                 />
@@ -276,19 +353,29 @@ export default function RegisterPage() {
                                   htmlFor="agreeTerms"
                                   className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                                 >
-                                  I agree to the{" "}
-                                  <Link href="/terms" className="text-purple-400 hover:text-purple-300">
+                                  I agree to the{' '}
+                                  <Link
+                                    href="/terms"
+                                    className="text-purple-400 hover:text-purple-300"
+                                  >
                                     Terms of Service
-                                  </Link>{" "}
-                                  and{" "}
-                                  <Link href="/privacy" className="text-purple-400 hover:text-purple-300">
+                                  </Link>{' '}
+                                  and{' '}
+                                  <Link
+                                    href="/privacy"
+                                    className="text-purple-400 hover:text-purple-300"
+                                  >
                                     Privacy Policy
                                   </Link>
                                 </label>
                               </div>
                             )}
                           </Field>
-                          <ErrorMessage name="agreeTerms" component="div" className="text-red-400 text-xs mt-1" />
+                          <ErrorMessage
+                            name="agreeTerms"
+                            component="div"
+                            className="text-red-400 text-xs mt-1"
+                          />
                         </div>
                       </div>
 
@@ -304,7 +391,7 @@ export default function RegisterPage() {
                             Creating Account...
                           </>
                         ) : (
-                          "Create Account"
+                          'Create Account'
                         )}
                       </Button>
                     </Form>
@@ -324,8 +411,11 @@ export default function RegisterPage() {
                 {/* Sign In Link */}
                 <div className="mt-6 text-center">
                   <p className="text-sm text-zinc-400">
-                    Already have an account?{" "}
-                    <Link href="/login" className="font-medium text-purple-400 hover:text-purple-300">
+                    Already have an account?{' '}
+                    <Link
+                      href="/login"
+                      className="font-medium text-purple-400 hover:text-purple-300"
+                    >
                       Sign in
                     </Link>
                   </p>
@@ -339,10 +429,18 @@ export default function RegisterPage() {
       {/* Footer */}
       <footer className="py-6 border-t border-zinc-800">
         <div className="container mx-auto px-4 text-center text-sm text-zinc-500">
-          <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.</p>
+          <p>
+            © {new Date().getFullYear()} Hatsu. All rights reserved. Developed
+            by Wilson Ponseca.
+            <Link
+              href="/sitemap/sitemap.xml"
+              className="text-purple-400 hover:text-purple-300 ml-2"
+            >
+              Sitemap
+            </Link>
+          </p>
         </div>
       </footer>
     </div>
   )
 }
-

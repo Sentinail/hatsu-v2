@@ -14,6 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
+import Header from '@/components/header'
 
 export default function Home() {
   const [popularAnime, setPopularAnime] = useState([])
@@ -82,84 +83,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-zinc-800">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="text-2xl font-bold text-purple-500">
-              Hatsu
-            </Link>
-            <nav className="hidden md:flex items-center space-x-6">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                  >
-                    Browse <ChevronDown size={16} className="ml-1" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-zinc-900 border-zinc-700 text-white">
-                  <DropdownMenuItem className="hover:bg-zinc-800">
-                    <Link href="/search?genre=Action" className="w-full">
-                      Action
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-zinc-800">
-                    <Link href="/search?genre=Romance" className="w-full">
-                      Romance
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-zinc-800">
-                    <Link href="/search?genre=Fantasy" className="w-full">
-                      Fantasy
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-zinc-800">
-                    <Link href="/search?genre=Sci-fi" className="w-full">
-                      Sci-Fi
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </nav>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/search"
-              className="p-2 text-zinc-400 hover:text-white transition"
-            >
-              <Search size={20} />
-            </Link>
-            <Link
-              href="/notifications"
-              className="p-2 text-zinc-400 hover:text-white transition"
-            >
-              <Bell size={20} />
-            </Link>
-            <div className="hidden md:flex gap-2">
-              <Link href="/login">
-                <Button
-                  variant="ghost"
-                  className="text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                >
-                  Login
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button className="bg-purple-600 hover:bg-purple-700 text-white hover:cursor-pointer">
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
-            <Button
-              variant="ghost"
-              className="md:hidden p-2 text-zinc-400 hover:text-white hover:bg-transparent hover:cursor-pointer"
-            >
-              <Menu size={24} />
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="pt-16">
         {/* Hero Section - Carousel */}
@@ -313,7 +237,16 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-zinc-800 text-center text-zinc-500 text-sm">
-            <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.</p>
+            <p>
+              © {new Date().getFullYear()} Hatsu. All rights reserved.
+              Developed
+              <Link
+                href="/sitemap/sitemap.xml"
+                className="text-purple-400 hover:text-purple-300 ml-2"
+              >
+                Sitemap
+              </Link>
+            </p>
           </div>
         </div>
       </footer>

@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, Search, Home } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import AnimeGrid from "@/features/home/components/AnimeGrid"
 import Providers from "@/service"
+import Header from "@/components/header"
 
 export default function PopularAnimePage() {
   const router = useRouter()
@@ -66,24 +67,7 @@ export default function PopularAnimePage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-zinc-800">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-purple-500">
-            Hatsu
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/search" className="p-2 text-zinc-400 hover:text-white transition">
-              <Search size={20} />
-            </Link>
-            <Link href="/home">
-              <Button variant="ghost" className="text-zinc-400 hover:text-white">
-                <Home size={20} className="mr-2" />
-                Home
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="container mx-auto px-4 pt-24 pb-16">
         <div className="flex items-center justify-between mb-8">
@@ -146,7 +130,16 @@ export default function PopularAnimePage() {
       {/* Footer */}
       <footer className="bg-zinc-900 border-t border-zinc-800 py-6">
         <div className="container mx-auto px-4 text-center text-sm text-zinc-500">
-          <p>© {new Date().getFullYear()} Hatsu. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Hatsu. All rights reserved. Developed
+            by Wilson Ponseca.
+            <Link
+              href="/sitemap/sitemap.xml"
+              className="text-purple-400 hover:text-purple-300 ml-2"
+            >
+              Sitemap
+            </Link>
+          </p>
         </div>
       </footer>
     </div>

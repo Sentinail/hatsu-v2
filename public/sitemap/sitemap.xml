@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/home</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/login</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/register</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/latest</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/trending</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/schedule</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/about</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=Action</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=Romance</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=Fantasy</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=Sci-Fi</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=action</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=romance</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=comedy</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=horror</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=isekai</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=mecha</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=sports</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://hatsu-v2-sable.vercel.app/search?genre=mystery</loc>
+  <lastmod>2025-03-12T05:42:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
+</urlset>

@@ -31,6 +31,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import Providers from '@/service'
+import Header from '@/components/header'
 
 export default function LandingPage() {
   const [activeSlide, setActiveSlide] = useState(0)
@@ -214,208 +215,7 @@ export default function LandingPage() {
       </div>
 
       {/* Navigation Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-zinc-800">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Link
-                href="/"
-                className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mr-8"
-              >
-                Hatsu
-              </Link>
-
-              {/* Desktop Navigation */}
-              <nav className="hidden md:flex items-center space-x-1">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                    >
-                      Browse <ChevronDown size={16} className="ml-1" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-zinc-900 border-zinc-700 text-white">
-                    <DropdownMenuItem className="hover:bg-zinc-800">
-                      <Link href="/search?genre=Action" className="w-full">
-                        Action
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="hover:bg-zinc-800">
-                      <Link href="/search?genre=Romance" className="w-full">
-                        Romance
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="hover:bg-zinc-800">
-                      <Link href="/search?genre=Fantasy" className="w-full">
-                        Fantasy
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="hover:bg-zinc-800">
-                      <Link href="/search?genre=Sci-fi" className="w-full">
-                        Sci-Fi
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                <Link href="/home">
-                  <Button
-                    variant="ghost"
-                    className="text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                  >
-                    Home
-                  </Button>
-                </Link>
-
-                <Link href="/about">
-                  <Button
-                    variant="ghost"
-                    className="text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                  >
-                    About
-                  </Button>
-                </Link>
-              </nav>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href="/search"
-                      className="p-2 text-zinc-400 hover:text-white transition"
-                    >
-                      <Search size={20} />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Search</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href="/notifications"
-                      className="p-2 text-zinc-400 hover:text-white transition"
-                    >
-                      <Bell size={20} />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Notifications</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              <div className="hidden md:flex gap-2">
-                <Link href="/login">
-                  <Button
-                    variant="ghost"
-                    className="text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                  >
-                    Login
-                  </Button>
-                </Link>
-                <Link href="/register">
-                  <Button className="bg-purple-600 hover:bg-purple-700 text-white hover:cursor-pointer">
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Mobile menu button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden text-zinc-400 hover:text-white hover:bg-transparent hover:cursor-pointer"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </Button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="md:hidden overflow-hidden"
-              >
-                <nav className="mt-4 flex flex-col space-y-2 pb-4">
-                  <Link href="/home" onClick={() => setMobileMenuOpen(false)}>
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                    >
-                      Home
-                    </Button>
-                  </Link>
-                  <Link href="/browse" onClick={() => setMobileMenuOpen(false)}>
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                    >
-                      Browse
-                    </Button>
-                  </Link>
-                  <Link
-                    href="/schedule"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                    >
-                      Schedule
-                    </Button>
-                  </Link>
-                  <Link href="/about" onClick={() => setMobileMenuOpen(false)}>
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-white hover:text-purple-400 hover:bg-zinc-800 hover:cursor-pointer"
-                    >
-                      About
-                    </Button>
-                  </Link>
-                  <div className="pt-2 flex gap-2">
-                    <Link
-                      href="/login"
-                      className="flex-1"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <Button
-                        variant="outline"
-                        className="w-full border-zinc-700"
-                      >
-                        Login
-                      </Button>
-                    </Link>
-                    <Link
-                      href="/register"
-                      className="flex-1"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <Button className="w-full bg-purple-600 hover:bg-purple-700 hover:cursor-pointer hover:cursor-pointer">
-                        Sign Up
-                      </Button>
-                    </Link>
-                  </div>
-                </nav>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </header>
+      <Header />
 
       <main className="relative z-10">
         {/* Hero Carousel */}
@@ -1083,7 +883,7 @@ export default function LandingPage() {
                   <div className="flex items-center mb-4">
                     <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3">
                       <Image
-                        src={testimonial.avatar || '/placeholder.svg'}
+                        src={testimonial.avatar || 'https://placehold.co/100x100/333/white?text=Avatar'}
                         alt={testimonial.name}
                         fill
                         className="object-cover"
@@ -1129,7 +929,7 @@ export default function LandingPage() {
                   onClick={() => openLightbox(image.fullsize)}
                 >
                   <Image
-                    src={image.thumbnail || '/placeholder.svg'}
+                    src={image.thumbnail || 'https://placehold.co/300x200/333/white?text=Image'}
                     alt={image.title}
                     width={300}
                     height={200}
@@ -1149,7 +949,7 @@ export default function LandingPage() {
               <DialogContent className="bg-black/90 border-zinc-800 max-w-4xl p-1">
                 <div className="relative aspect-video">
                   <Image
-                    src={lightboxImage || '/placeholder.svg'}
+                    src={lightboxImage || 'https://placehold.co/1200x800/333/white?text=Image'}
                     alt="Enlarged anime image"
                     fill
                     className="object-contain"
@@ -1418,8 +1218,8 @@ export default function LandingPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/" className="hover:text-purple-400">
-                    Hatsu
+                  <Link href="/sitemap/sitemap.xml" className="hover:text-purple-400">
+                    Sitemap
                   </Link>
                 </li>
               </ul>
@@ -1476,7 +1276,14 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-zinc-800 text-center text-zinc-500 text-sm">
-            <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.</p>
+            <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.
+            <Link
+              href="/sitemap/sitemap.xml"
+              className="text-purple-400 hover:text-purple-300 ml-2"
+            >
+              Sitemap
+            </Link>
+            </p>
           </div>
         </div>
       </footer>
@@ -1486,7 +1293,7 @@ export default function LandingPage() {
         <DialogContent className="bg-black/90 border-zinc-800 max-w-4xl p-1">
           <div className="relative aspect-video">
             <Image
-              src={lightboxImage || '/placeholder.svg'}
+              src={lightboxImage || 'https://placehold.co/1200x800/333/white?text=Image'}
               alt="Enlarged anime image"
               fill
               className="object-contain"

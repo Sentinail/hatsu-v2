@@ -9,7 +9,7 @@ import AnimeGrid from '@/features/home/components/AnimeGrid'
 import Providers from '@/service'
 import Header from '@/components/header'
 
-export default function LatestReleasesPage() {
+export default function PopularAnimePage() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -30,7 +30,7 @@ export default function LatestReleasesPage() {
 
       try {
         const anilist = Providers.ANILIST
-        const data = await anilist.fetchLatestReleaseAnime({
+        const data = await anilist.fetchPopularAnime({
           page: currentPage,
           perPage: perPage,
           isCached: true,
@@ -45,7 +45,7 @@ export default function LatestReleasesPage() {
           setError('No anime found')
         }
       } catch (err) {
-        console.error('Error fetching latest anime:', err)
+        console.error('Error fetching popular anime:', err)
         setError('Failed to load anime. Please try again.')
       } finally {
         setIsLoading(false)
@@ -61,17 +61,16 @@ export default function LatestReleasesPage() {
     // Create new URL with updated page parameter
     const params = new URLSearchParams(searchParams.toString())
     params.set('page', page.toString())
-    router.push(`/latest?${params.toString()}`)
+    router.push(`/popular?${params.toString()}`)
   }
 
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
       <Header />
-
       <main className="container mx-auto px-4 pt-24 pb-16">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">Latest Releases</h1>
+          <h1 className="text-3xl font-bold">Popular Anime</h1>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -100,7 +99,7 @@ export default function LatestReleasesPage() {
         <AnimeGrid
           animeList={animeList}
           isLoading={isLoading}
-          category="Latest"
+          category="Popular"
         />
 
         {error && !isLoading && (

@@ -15,33 +15,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
+import Header from '@/components/header'
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Header */}
-      <header className="bg-black/80 backdrop-blur-md border-b border-zinc-800 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-purple-500">
-            Hatsu
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/home">
-              <Button
-                variant="ghost"
-                className="text-zinc-400 hover:text-white"
-              >
-                Home
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button className="bg-purple-600 hover:bg-purple-700">
-                Sign In
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
@@ -358,7 +338,11 @@ export default function AboutPage() {
                       <Github className="h-4 w-4 mr-2" /> GitHub
                     </Button>
                   </Link>
-                  <Link href={'https://www.linkedin.com/in/wilson-ponseca-40495026b/'}>
+                  <Link
+                    href={
+                      'https://www.linkedin.com/in/wilson-ponseca-40495026b/'
+                    }
+                  >
                     <Button
                       size="sm"
                       className="border-zinc-700 hover:border-purple-500 hover:bg-zinc-800 hover:cursor-pointer"
@@ -462,8 +446,8 @@ export default function AboutPage() {
               </div>
 
               <p className="mt-6 text-center text-zinc-400 text-sm">
-                Special thanks to the developers of Consumet and Anilist for their
-                amazing work and contributions to the anime community.
+                Special thanks to the developers of Consumet and Anilist for
+                their amazing work and contributions to the anime community.
               </p>
             </div>
           </div>
@@ -508,8 +492,16 @@ export default function AboutPage() {
               </Link>
             </div>
             <div className="text-zinc-500 text-sm">
-              <p>© {new Date().getFullYear()} Hatsu. All rights reserved. Developed by Wilson Ponseca.</p>
-              <p className="mt-1">Created by Wilson Ponseca</p>
+              <p>
+                © {new Date().getFullYear()} Hatsu. All rights reserved.
+                Developed by Wilson Ponseca.
+                <Link
+                  href="/sitemap/sitemap.xml"
+                  className="text-purple-400 hover:text-purple-300 ml-2"
+                >
+                  Sitemap
+                </Link>
+              </p>
             </div>
           </div>
         </div>
