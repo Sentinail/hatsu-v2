@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hatsu - Anime Streaming Platform
 
-## Getting Started
+Hatsu is a modern anime streaming platform built with Next.js, featuring a responsive design, real-time data from Anilist GraphQL API, and a user-friendly interface for discovering and watching anime.
 
-First, run the development server:
+## Features
 
+- 🎬 Stream anime episodes with adaptive quality
+- 🔍 Advanced search with filters
+- 📱 Fully responsive design for all devices
+- 🔄 Real-time updates for airing schedules
+- 🌙 Dark mode by default
+- 🎨 Modern UI with smooth animations
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- [Node.js](https://nodejs.org/) (v18.0.0 or higher)
+- npm (comes with Node.js) or [Yarn](https://yarnpkg.com/)
+- Git (optional, for cloning the repository)
+
+## Setup Guide
+
+### 1. Install Node.js and npm
+
+#### Windows and macOS:
+1. Download the installer from [Node.js official website](https://nodejs.org/)
+2. Run the installer and follow the installation wizard
+3. Verify installation by opening a terminal/command prompt and running:
+   ```bash
+   node --version
+   npm --version
+   ```
+
+### 2. Obtain the Project Files
+
+#### If you have the .zip file:
+1. Extract the `.zip` file to your preferred location.
+2. Open a terminal and navigate to the extracted folder:
+   ```bash
+   cd path/to/hatsu
+   ```
+
+#### If you prefer cloning from GitHub:
+1. Clone the Hatsu repository:
+   ```bash
+   git clone https://github.com/your-username/hatsu.git
+   cd hatsu
+   ```
+
+### 3. Install Dependencies
+
+Navigate to the project directory and install the required dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+   npm install
+   # or
+   yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Configure Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file in the project root and add the following:
+```
+NEXT_PUBLIC_PROXY_URL=https://gogoanime-and-hianime-proxy.vercel.app
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Run the Development Server
 
-## Learn More
+Start the Next.js development server:
+```bash
+   npm run dev
+   # or
+   yarn dev
+```
+The app should now be running at [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+### 6. Build and Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To build the application for production:
+```bash
+   npm run build
+   npm run start
+```
+For deployment, you can use platforms like Vercel, Netlify, or AWS.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 7. Optional: Deploy to Vercel
 
-## Deploy on Vercel
+To deploy using Vercel:
+1. Install Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+2. Run the deployment command:
+   ```bash
+   vercel
+   ```
+Follow the setup prompts to complete the deployment.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Now, you have successfully set up Hatsu! 🎉
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
