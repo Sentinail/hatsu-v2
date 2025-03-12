@@ -44,7 +44,7 @@ Before you begin, ensure you have the following installed on your system:
 #### If you prefer cloning from GitHub:
 1. Clone the Hatsu repository:
    ```bash
-   git clone https://github.com/your-username/hatsu.git
+   git clone https://github.com/Sentinail/hatsu-v2.git
    cd hatsu
    ```
 
