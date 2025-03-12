@@ -50,7 +50,7 @@ export default function WatchPage() {
         const anilist = Providers.ANILIST
         const data = await anilist.fetchEpisodeStream({
           id: params.id,
-          isCached: false,
+          isCached: true,
         })
         
         if (!data || !data.sources || data.sources.length === 0) {

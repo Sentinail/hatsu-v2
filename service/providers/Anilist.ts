@@ -172,7 +172,7 @@ class Anilist {
       }
 
       const hashedUrl = await getNormalizedQueryKey(
-        this.baseUrl,
+        url,
         "GET",
         params
       )
@@ -355,7 +355,7 @@ class Anilist {
       }
 
       const hashedUrl = await getNormalizedQueryKey(
-        this.baseUrl,
+        url,
         "GET",
         params
       )
