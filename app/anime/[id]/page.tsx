@@ -271,7 +271,7 @@ export default function AnimePage() {
               <div className="flex flex-wrap gap-2">
                 {genres.map((genre: string) => (
                   <Link
-                    href={`/genre/${genre.toLowerCase()}`}
+                    href={`/search?genre=${genre.toLowerCase()}`}
                     key={genre}
                     className="text-xs px-2 py-1 bg-zinc-800 hover:bg-purple-600/80 rounded-full transition-colors"
                   >
